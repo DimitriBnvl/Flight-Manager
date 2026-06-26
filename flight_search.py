@@ -2,6 +2,7 @@ import os
 import serpapi
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
+from pprint import pprint
 
 load_dotenv()
 
@@ -20,6 +21,13 @@ class FlightSearch:
         self.six_months_from_now = datetime.now() + timedelta(days=180)
 
         self.client = serpapi.Client(api_key=self.api_key)
+
+    def check_flights(self, sheet_data):
+        for destination in sheet_data.get_data()["prices"]:
+            iata_code = destination["airports"]
+            print(f"Searching flights to {destination['city']} ({iata_code})...")
+            flight_data = self.get_flights(iata_code)
+            pprint(flight_data)
 
     def get_flights(self, arrival_id):
         return self.client.search({
