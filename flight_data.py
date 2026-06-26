@@ -1,13 +1,12 @@
 class FlightData:
-    def __init__(self, price, origin_airport, destination_airport, out_date, return_date):
+    def __init__(self, price, origin_airport, destination_airport, out_date):
         self.price = price
         self.origin_airport = origin_airport
         self.destination_airport = destination_airport
         self.out_date = out_date
-        self.return_date = return_date
 
 
-def find_cheapest_flight(data, return_date) -> FlightData | None:
+def find_cheapest_flight(data) -> FlightData | None:
     flights = data.get("best_flights", []) + data.get("other_flights", [])
     if not flights:
         return None
@@ -20,5 +19,4 @@ def find_cheapest_flight(data, return_date) -> FlightData | None:
         origin_airport=first_leg["departure_airport"]["id"],
         destination_airport=last_leg["arrival_airport"]["id"],
         out_date=first_leg["departure_airport"]["time"].split(" ")[0],
-        return_date=return_date,
     )
