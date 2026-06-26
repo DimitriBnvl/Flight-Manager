@@ -7,7 +7,7 @@ class FlightData:
         self.return_date = return_date
 
 
-def find_cheapest_flight(data, return_date):
+def find_cheapest_flight(data, return_date) -> FlightData | None:
     flights = data.get("best_flights", []) + data.get("other_flights", [])
     if not flights:
         return None
