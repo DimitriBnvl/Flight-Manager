@@ -1,5 +1,7 @@
 from data_manager import DataManager
 from flight_search import FlightSearch
+from flight_data import find_cheapest_flight
+from notification_manager import NotificationManager
 import requests_cache
 
 requests_cache.install_cache(
@@ -11,7 +13,32 @@ requests_cache.install_cache(
 )
 
 if __name__ == "__main__":
-    sheet_data = DataManager()
+    data_manager = DataManager()
     flight_search = FlightSearch()
+    notification_manager = NotificationManager()
 
-    flight_search.check_flights(sheet_data)
+    return_date = flight_search.six_months_from_now.strftime("%Y-%m-%d")
+
+    for destination in data_manager.get_data()["prices"]:
+        city = destination["city"]
+        iata_code = destination["airports"]
+        lowest_price = destination["cheapestFlight"]
+        row_id = destination["id"]
+
+        print(f"Searching flights to {city} ({iata_code})...")
+        data = flight_search.get_flights(iata_code)
+        cheapest = find_cheapest_flight(data, return_date)
+
+        if cheapest.price == "N/A":
+            print(f"  No flights found to {city}.")
+            continue
+
+        print(
+            f"  Cheapest: €{cheapest.price} | {cheapest.origin_airport} → "
+            f"{cheapest.destination_airport} | Out: {cheapest.out_date} | Return: {cheapest.return_date}"
+        )
+
+        if cheapest.price < lowest_price:
+            print(f"  Lower price found! (€{cheapest.price} vs sheet €{lowest_price})")
+            data_manager.update_lowest_price(row_id, cheapest.price)
+            notification_manager.send_sms(city, cheapest)

@@ -1,22 +1,48 @@
 class FlightData:
-    def __init__(self, price, origin_airport, destination_airport, out_date):
+    def __init__(self, price, origin_airport, destination_airport, out_date, return_date):
         self.price = price
         self.origin_airport = origin_airport
         self.destination_airport = destination_airport
         self.out_date = out_date
+        self.return_date = return_date
 
 
-def find_cheapest_flight(data) -> FlightData | None:
+def find_cheapest_flight(data, return_date) -> FlightData:
     flights = data.get("best_flights", []) + data.get("other_flights", [])
-    if not flights:
-        return None
 
-    cheapest = min(flights, key=lambda x: x["price"])
+    if not flights:
+        return FlightData(
+            price="N/A",
+            origin_airport="N/A",
+            destination_airport="N/A",
+            out_date="N/A",
+            return_date="N/A",
+        )
+
+    cheapest = None
+    for flight in flights:
+        try:
+            price = flight["price"]
+        except KeyError:
+            continue
+        if cheapest is None or price < cheapest["price"]:
+            cheapest = flight
+
+    if cheapest is None:
+        return FlightData(
+            price="N/A",
+            origin_airport="N/A",
+            destination_airport="N/A",
+            out_date="N/A",
+            return_date="N/A",
+        )
+
     first_leg = cheapest["flights"][0]
-    last_leg  = cheapest["flights"][-1]
+    last_leg = cheapest["flights"][-1]
     return FlightData(
         price=cheapest["price"],
         origin_airport=first_leg["departure_airport"]["id"],
         destination_airport=last_leg["arrival_airport"]["id"],
         out_date=first_leg["departure_airport"]["time"].split(" ")[0],
+        return_date=return_date,
     )
