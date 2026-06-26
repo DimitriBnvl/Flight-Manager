@@ -2,7 +2,7 @@ import os
 import serpapi
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
-from flight_data import FlightData
+from flight_data import find_cheapest_flight
 
 load_dotenv()
 
@@ -27,24 +27,9 @@ class FlightSearch:
             iata_code = destination["airports"]
             print(f"Searching flights to {destination['city']} ({iata_code})...")
             data = self.get_flights(iata_code)
-            cheapest = self.find_cheapest_flight(data)
+            cheapest = find_cheapest_flight(data, self.six_months_from_now.strftime("%Y-%m-%d"))
             if cheapest:
                 print(f"  Cheapest: €{cheapest.price} | {cheapest.origin_airport} → {cheapest.destination_airport} on {cheapest.out_date}")
-
-    def find_cheapest_flight(self, data):
-        flights = data.get("best_flights", []) + data.get("other_flights", [])
-        if not flights:
-            return None
-        cheapest = min(flights, key=lambda x: x["price"])
-        first_leg = cheapest["flights"][0]
-        last_leg  = cheapest["flights"][-1]
-        return FlightData(
-            price=cheapest["price"],
-            origin_airport=first_leg["departure_airport"]["id"],
-            destination_airport=last_leg["arrival_airport"]["id"],
-            out_date=first_leg["departure_airport"]["time"].split(" ")[0],
-            return_date=self.six_months_from_now.strftime("%Y-%m-%d"),
-        )
 
     def get_flights(self, arrival_id):
         return self.client.search({
