@@ -11,6 +11,7 @@ SEARCH_STEP_DAYS = 28  # check one departure date per month
 
 
 class FlightSearch:
+    """Queries the SerpAPI Google Flights engine to find cheap round-trip fares."""
     def __init__(self):
         self.type = "1"          # 1 = Round Trip
         self.adults = "1"
@@ -27,19 +28,20 @@ class FlightSearch:
         self.client = serpapi.Client(api_key=self.api_key)
 
     def find_cheapest(self, arrival_id) -> FlightData:
+        """Search monthly across the next 6 months and return the cheapest 7-day round trip."""
         cheapest = None
-        outbound = self.tomorrow
+        outbound_date = self.tomorrow
 
-        while outbound <= self.six_months_from_now - timedelta(days=TRIP_DURATION_DAYS):
-            return_dt = outbound + timedelta(days=TRIP_DURATION_DAYS)
-            data = self._get_flights(arrival_id, outbound, return_dt)
-            flight = find_cheapest_flight(data, return_dt.strftime("%Y-%m-%d"))
+        while outbound_date <= self.six_months_from_now - timedelta(days=TRIP_DURATION_DAYS):
+            return_date = outbound_date + timedelta(days=TRIP_DURATION_DAYS)
+            data = self._get_flights(arrival_id, outbound_date, return_date)
+            flight = find_cheapest_flight(data, return_date.strftime("%Y-%m-%d"))
 
             if flight.price != "N/A":
                 if cheapest is None or flight.price < cheapest.price:
                     cheapest = flight
 
-            outbound += timedelta(days=SEARCH_STEP_DAYS)
+            outbound_date += timedelta(days=SEARCH_STEP_DAYS)
 
         return cheapest or FlightData(
             price="N/A",
@@ -50,6 +52,7 @@ class FlightSearch:
         )
 
     def _get_flights(self, arrival_id, outbound_date, return_date):
+        """Make a single SerpAPI call for the given arrival airport and date pair."""
         return self.client.search({
             "engine": "google_flights",
             "departure_id": self.departure_city_code,

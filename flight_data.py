@@ -1,4 +1,6 @@
 class FlightData:
+    """Holds the details of a single flight option returned by the search."""
+
     def __init__(self, price, origin_airport, destination_airport, out_date, return_date):
         self.price = price
         self.origin_airport = origin_airport
@@ -8,6 +10,12 @@ class FlightData:
 
 
 def find_cheapest_flight(data, return_date) -> FlightData:
+    """Parse a SerpAPI Google Flights response and return the cheapest option.
+
+    Merges best_flights and other_flights, skips entries with no price field,
+    and returns a FlightData with 'N/A' fields if no valid flights are found.
+    return_date is passed in explicitly because it is not present in the response.
+    """
     flights = data.get("best_flights", []) + data.get("other_flights", [])
 
     if not flights:

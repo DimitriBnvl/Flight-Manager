@@ -6,6 +6,7 @@ load_dotenv()
 
 
 class NotificationManager:
+    """Sends flight deal alerts via WhatsApp using the Twilio sandbox."""
     def __init__(self):
         self.client = Client(
             os.environ["TWILIO_ACCOUNT_SID"],
@@ -15,6 +16,7 @@ class NotificationManager:
         self.to_number = os.environ["TWILIO_TO_PHONE_NUMBER"]
 
     def send_sms(self, city, flight_data):
+        """Send a WhatsApp message with the deal details for the given city."""
         message = self.client.messages.create(
             body=(
                 f"Low price alert!\n"

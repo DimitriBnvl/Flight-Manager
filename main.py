@@ -29,10 +29,11 @@ if __name__ == "__main__":
             print(f"  No flights found to {city}.")
             continue
 
-        print(
-            f"  Cheapest: €{cheapest.price} | {cheapest.origin_airport} → "
-            f"{cheapest.destination_airport} | Out: {cheapest.out_date} | Return: {cheapest.return_date}"
-        )
+        else:
+            print(
+                f"  Cheapest: €{cheapest.price} | {cheapest.origin_airport} → "
+                f"{cheapest.destination_airport} | Out: {cheapest.out_date} | Return: {cheapest.return_date}"
+            )
 
         if cheapest.price < lowest_price:
             print(f"  Lower price found! (€{cheapest.price} vs sheet €{lowest_price})")

@@ -22,5 +22,8 @@ build/
 # macOS
 .DS_Store
 
+# Cache
+*.sqlite
+
 # Claude
 .clade
