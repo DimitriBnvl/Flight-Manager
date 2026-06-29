@@ -29,13 +29,13 @@ SHEETY_PASSWORD=your_sheety_password
 DEPARTURE_CITY_CODE=EDI
 TWILIO_ACCOUNT_SID=your_account_sid
 TWILIO_AUTH_TOKEN=your_auth_token
-TWILIO_PHONE_NUMBER=+14155238886
+TWILIO_PHONE_NUMBER=+twilio_number
 TWILIO_TO_PHONE_NUMBER=+your_number
 ```
 
 ### 3. Join the Twilio WhatsApp sandbox
 
-Send `join <your-sandbox-keyword>` to **+14155238886** on WhatsApp. The keyword is shown in your Twilio Console under **Messaging → Try it out → Send a WhatsApp message**.
+Send `join <your-sandbox-keyword>` to **+twilio_number** on WhatsApp. The keyword is shown in your Twilio Console under **Messaging → Try it out → Send a WhatsApp message**.
 
 ### 4. Set up the Google Sheet
 
