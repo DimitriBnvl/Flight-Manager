@@ -37,5 +37,5 @@ if __name__ == "__main__":
 
         if cheapest.price < lowest_price:
             print(f"  Lower price found! (€{cheapest.price} vs sheet €{lowest_price})")
-            data_manager.update_lowest_price(row_id, cheapest.price)
+            data_manager.update_lowest_price(row_id, cheapest.price, cheapest.out_date, cheapest.return_date)
             notification_manager.send_sms(city, cheapest)
