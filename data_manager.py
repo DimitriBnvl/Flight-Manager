@@ -18,14 +18,15 @@ class DataManager:
         """Return the sheet data fetched at initialisation."""
         return self._data
 
-    def update_lowest_price(self, row_id, new_price, departure_date, arrival_date):
-        """Overwrite cheapestFlight, departureDate, and arrivalDate for a given row."""
+    def update_lowest_price(self, row_id, new_price, departure_date, arrival_date, stops):
+        """Overwrite cheapestFlight, departureDate, arrivalDate, and stops for a given row."""
         requests.put(
             f"{self.sheety_endpoint}/{row_id}",
             json={"price": {
                 "cheapestFlight": new_price,
                 "departureDate": departure_date,
                 "arrivalDate": arrival_date,
+                "stops": stops,
             }},
             auth=self.auth,
         )

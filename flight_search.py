@@ -49,6 +49,7 @@ class FlightSearch:
             destination_airport="N/A",
             out_date="N/A",
             return_date="N/A",
+            stops="N/A",
         )
 
     def _get_flights(self, arrival_id, outbound_date, return_date):

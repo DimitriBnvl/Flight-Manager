@@ -32,10 +32,10 @@ if __name__ == "__main__":
         else:
             print(
                 f"  Cheapest: €{cheapest.price} | {cheapest.origin_airport} → "
-                f"{cheapest.destination_airport} | Out: {cheapest.out_date} | Return: {cheapest.return_date}"
+                f"{cheapest.destination_airport} | Out: {cheapest.out_date} | Return: {cheapest.return_date} | With: {cheapest.stops} stop(s)."
             )
 
         if cheapest.price < lowest_price:
             print(f"  Lower price found! (€{cheapest.price} vs sheet €{lowest_price})")
-            data_manager.update_lowest_price(row_id, cheapest.price, cheapest.out_date, cheapest.return_date)
+            data_manager.update_lowest_price(row_id, cheapest.price, cheapest.out_date, cheapest.return_date, cheapest.stops)
             notification_manager.send_sms(city, cheapest)
