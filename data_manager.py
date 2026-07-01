@@ -20,7 +20,7 @@ class DataManager:
 
     def update_lowest_price(self, row_id, new_price, departure_date, arrival_date, stops):
         """Overwrite cheapestFlight, departureDate, arrivalDate, and stops for a given row."""
-        requests.put(
+        response = requests.put(
             f"{self.sheety_endpoint}/{row_id}",
             json={"price": {
                 "cheapestFlight": new_price,
@@ -30,3 +30,4 @@ class DataManager:
             }},
             auth=self.auth,
         )
+        print(f"  Sheety PUT status: {response.status_code} | {response.text}")
