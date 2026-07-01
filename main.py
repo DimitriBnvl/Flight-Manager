@@ -39,3 +39,25 @@ if __name__ == "__main__":
             print(f"  Lower price found! (€{cheapest.price} vs sheet €{lowest_price})")
             data_manager.update_lowest_price(row_id, cheapest.price, cheapest.out_date, cheapest.return_date, cheapest.stops)
             notification_manager.send_sms(city, cheapest)
+            customer_emails = data_manager.get_customer_emails()["users"]
+            notification_manager.send_emails(customer_emails, city, cheapest)
+
+"""
+Final Day 40 Req:
+    You should make changes to your data_manager.py, your main.py and your .env file.
+    
+    * Add your endpoints for your "prices" and your "users" sheets to your .env file.
+    
+    * Add a method called get_customer_emails() to your data_manager.py. This should return the data on your "users" spreadsheet.
+    
+    * Update the __init()__ method so that you retrieve all the environment variables in one place. This should include things like your SHEETY_USERNAME , your password, but also your endpoints.
+
+    1. Update your .env file with your SMTP address, your email, and your app password.
+
+    2. In the notification_manager.py, update your __init__() method so that you retrieve all the environment variables in one place.
+
+    3. Create a method in the NotificationManager called send_emails() .
+
+NOTE: when sending emails, it won't like the "£" symbol, you might get an error like the one below:
+
+"""
